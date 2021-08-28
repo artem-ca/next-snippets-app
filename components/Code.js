@@ -14,14 +14,14 @@ export default function Code({ code }) {
         <div>
             <button
                 className='bg-purple-800 text-xs hover:bg-purple-900 text-white flex
-                font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mb-2'
+                font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline mb-2 items-center'
                 type='submit'
                 onClick={() => setShowCode(!showCode)}>
                 {showCode ? 'Hide the Code' : 'Show the Code'}
 
                 <svg
                     xmlns='http://www.w3.org/2000/svg'
-                    class='h-5 w-5 mx-0.5'
+                    class='h-5 w-5'
                     fill='none'
                     viewBox='0 0 24 24'
                     stroke='currentColor'>

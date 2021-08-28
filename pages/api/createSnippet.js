@@ -1,11 +1,16 @@
 import { createSnippet } from '../../utils/Fauna'
-export default async function handler(req, res) {
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0'
+
+export default withApiAuthRequired(async function handler(req, res) {
+    const session = getSession(req, res)
+    const userId = session.user.sub
     const { name, language, description, code, rate } = req.body
     if (req.method !== 'POST') {
         return res.status(405).json({ msg: 'Method not allowed' })
     }
     try {
         const createdSnippet = await createSnippet(
+            userId,
             name,
             language,
             description,
@@ -17,4 +22,4 @@ export default async function handler(req, res) {
         console.error(err)
         res.status(500).json({ msg: 'Something went wrong.' })
     }
-}
+})
