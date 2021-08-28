@@ -1,15 +1,16 @@
 import { createSnippet } from '../../utils/Fauna'
 export default async function handler(req, res) {
-    const { code, language, description, name } = req.body
+    const { name, language, description, code, rate } = req.body
     if (req.method !== 'POST') {
         return res.status(405).json({ msg: 'Method not allowed' })
     }
     try {
         const createdSnippet = await createSnippet(
-            code,
+            name,
             language,
             description,
-            name
+            code,
+            rate
         )
         return res.status(200).json(createdSnippet)
     } catch (err) {

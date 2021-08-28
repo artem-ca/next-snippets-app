@@ -4,29 +4,35 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import head from 'next/head'
 export default function SnippetForm({ snippet }) {
-    //TODO: configure react hook form
+    const router = useRouter()
+
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm({
         defaultValues: {
-            code: snippet ? snippet.data.code : '',
+            name: snippet ? snippet.data.name : '',
             language: snippet ? snippet.data.language : '',
             description: snippet ? snippet.data.description : '',
-            name: snippet ? snippet.data.name : '',
+            code: snippet ? snippet.data.code : '',
+            rate: snippet ? snippet.data.rate : 0,
         },
     })
 
-    const router = useRouter()
-
     const createSnippet = async (data) => {
-        const { code, language, description, name } = data
+        const { name, language, description, code, rate } = data
 
         try {
             await fetch('/api/createSnippet', {
                 method: 'POST',
-                body: JSON.stringify({ code, language, description, name }),
+                body: JSON.stringify({
+                    name,
+                    language,
+                    description,
+                    code,
+                    rate,
+                }),
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -38,12 +44,19 @@ export default function SnippetForm({ snippet }) {
     }
 
     const updateSnippet = async (data) => {
-        const { code, language, description, name } = data
+        const { name, language, description, code, rate } = data
         const id = snippet.id
         try {
             await fetch('/api/updateSnippet', {
                 method: 'PUT',
-                body: JSON.stringify({ id, code, language, description, name }),
+                body: JSON.stringify({
+                    id,
+                    name,
+                    language,
+                    description,
+                    code,
+                    rate,
+                }),
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -81,20 +94,32 @@ export default function SnippetForm({ snippet }) {
                     htmlFor='language'>
                     Language
                 </label>
-                <select
-                    id='language'
-                    name='language'
-                    className='w-full border bg-white rounded px-3 py-2 outline-none text-gray-700'
-                    {...register('language', { required: true })}>
-                    <option className='py-1'>JavaScript</option>
-                    <option className='py-1'>HTML</option>
-                    <option className='py-1'>CSS</option>
-                </select>
-                {errors.language && (
-                    <p className='m-1 font-bold text-red-400'>
-                        Language is required
-                    </p>
-                )}
+
+                <div className='flex flex-row'>
+                    <select
+                        id='language'
+                        name='language'
+                        className='w-full border bg-white rounded px-3 py-2 outline-none text-gray-700'
+                        {...register('language', { required: true })}>
+                        <option className='py-1'>JavaScript</option>
+                        <option className='py-1'>HTML</option>
+                        <option className='py-1'>CSS</option>
+                    </select>
+
+                    <input
+                        type='text'
+                        id='rate'
+                        name='rate'
+                        className='ml-1 py-2 bg-white rounded-md text-center w-16'
+                        {...register('rate', { required: true })}
+                    />
+
+                    {errors.language && (
+                        <p className='m-1 font-bold text-red-400'>
+                            Language is required
+                        </p>
+                    )}
+                </div>
             </div>
             <div className='mb-4'>
                 <label
