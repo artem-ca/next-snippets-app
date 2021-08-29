@@ -4,10 +4,13 @@ import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0'
 export default withApiAuthRequired(async function handler(req, res) {
     const session = getSession(req, res)
     const userId = session.user.sub
-    const { name, language, description, code, rate } = req.body
+
     if (req.method !== 'POST') {
         return res.status(405).json({ msg: 'Method not allowed' })
     }
+
+    const { name, language, description, code, rate } = req.body
+
     try {
         const createdSnippet = await createSnippet(
             userId,

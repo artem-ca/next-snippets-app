@@ -1,11 +1,11 @@
 import React from 'react'
-import { useState } from 'react'
 import Code from './Code'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { useUser } from '@auth0/nextjs-auth0'
 
 export default function Snippet({ snippet, snippetDeleted, snippetLiked }) {
-    const router = useRouter()
+    const { user } = useUser()
 
     var [count, setCount] = useState(0)
 
@@ -22,7 +22,6 @@ export default function Snippet({ snippet, snippetDeleted, snippetLiked }) {
                     'Content-Type': 'application/json',
                 },
             })
-            router.push('/')
         } catch (err) {
             console.error(err)
         }
@@ -40,7 +39,6 @@ export default function Snippet({ snippet, snippetDeleted, snippetLiked }) {
                     'Content-Type': 'application/json',
                 },
             })
-            router.push('/')
         } catch (err) {
             console.error(err)
         }
@@ -55,7 +53,6 @@ export default function Snippet({ snippet, snippetDeleted, snippetLiked }) {
                     'Content-Type': 'application/json',
                 },
             })
-            snippetDeleted()
         } catch (err) {
             console.error(err)
         }
@@ -76,16 +73,20 @@ export default function Snippet({ snippet, snippetDeleted, snippetLiked }) {
 
             <div className='grid grid-cols-2 mt-2'>
                 <div>
-                    <Link href={`/edit/${snippet.id}`}>
-                        <a className='mr-2 text-gray-800 hover:text-green-400'>
-                            Edit
-                        </a>
-                    </Link>
-                    <button
-                        onClick={deleteSnippet}
-                        className='mr-2 text-gray-800 hover:text-red-400 '>
-                        Delete
-                    </button>
+                    {user && user.sub == snippet.data.userId && (
+                        <>
+                            <Link href={`/edit/${snippet.id}`}>
+                                <a className='mr-2 text-gray-800 hover:text-green-400'>
+                                    Edit
+                                </a>
+                            </Link>
+                            <button
+                                onClick={deleteSnippet}
+                                className='mr-2 text-gray-800 hover:text-red-400 '>
+                                Delete
+                            </button>
+                        </>
+                    )}
                 </div>
 
                 <div className='justify-self-end space-x-2 text-xl flex content-center'>

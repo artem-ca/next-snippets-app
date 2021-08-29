@@ -7,8 +7,8 @@ function MyApp({ Component, pageProps }) {
     return (
         <UserProvider>
             <div className='bg-purple-700 w-full p-10 min-h-screen'>
+                <Navbar />
                 <div className='max-w-2xl mx-auto'>
-                    <Navbar />
                     <Component {...pageProps} />
                 </div>
             </div>
